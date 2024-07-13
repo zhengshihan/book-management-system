@@ -4,16 +4,16 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                // 使用 Maven 构建项目
+                // Use Maven to build the project
                 bat 'mvn clean package'
             }
         }
         stage('Deploy') {
             steps {
                 script {
-                    // 部署到 Tomcat
+                    // Deploy to Tomcat
                     deploy adapters: [tomcat9(credentialsId: 'tomcat-credentials', path: '', url: 'http://localhost:9666')],
-                           contextPath: '/', jar: '**/target/*.jar'
+                           contextPath: '/', jar: 'C:/Users/zhengshihan/.jenkins/workspace/Bookstore_/target/demo-1-0.0.1-SNAPSHOT.jar'
                 }
             }
         }
