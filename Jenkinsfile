@@ -13,7 +13,7 @@ pipeline {
                 script {
                     // 部署到 Tomcat
                     deploy adapters: [tomcat9(credentialsId: 'tomcat-credentials', path: '', url: 'http://localhost:9666')],
-                           contextPath: '/', war: '**/target/*.war'
+                           contextPath: '/', jar: '**/target/*.jar'
                 }
             }
         }
