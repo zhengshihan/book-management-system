@@ -5,8 +5,8 @@ pipeline {
             steps {
                 
                 echo 'Building...'
-                sh 'mvn --version'
-                sh 'mvn clean package'
+                bat 'mvn --version'
+                bat 'mvn clean package'
             }
         }
         
