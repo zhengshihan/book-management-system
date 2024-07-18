@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  app:
+    image: zhengshihan/teamwithyixuan 
+    ports:
+      - "9090:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/books
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 
