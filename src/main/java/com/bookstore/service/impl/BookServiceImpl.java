@@ -22,7 +22,7 @@ public class BookServiceImpl implements BookService {
     private BookRepository bookRepository;
     
 	@Override
-	public List<Book> getAllBooks(String author) {
+	public List<Book> getAllGroups(String author) {
 		// TODO Auto-generated method stub
 		logger.trace("Entered get AllBooks method");
 		

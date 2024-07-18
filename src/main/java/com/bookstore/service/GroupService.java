@@ -6,7 +6,7 @@ import com.bookstore.model.Group;
 
 
 public interface GroupService {
-	List<Group> getAllUsers();
+	List<Group> getAllGroups();
 	Group getGroup(long id);
 	void deleteGroup(long id);
 	Group updateGroup(long id, Group group);

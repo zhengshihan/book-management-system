@@ -22,7 +22,7 @@ public class GroupServiceImpl implements GroupService {
 	private GroupRepository groupRepository;
 	
 	@Override
-	public List<Group> getAllUsers() {
+	public List<Group> getAllGroups() {
 		// TODO Auto-generated method stub
 		logger.trace("Entered get AllGroups method");
 		List<Group> groups = groupRepository.findAll();

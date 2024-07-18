@@ -41,7 +41,7 @@ public class GroupServiceMockTest {
 				new Group("user"),
 				new Group("admin"));
 		when(groupRepository.findAll()).thenReturn(groups);
-		assertEquals(groups, groupService.getAllUsers());
+		assertEquals(groups, groupService.getAllGroups());
 				
 	}
 	@Test
@@ -73,7 +73,7 @@ public class GroupServiceMockTest {
     }
     
     @Test
-    public void updateBook() {
+    public void updateGroup() {
     	Group group = new Group("user");
     	
     	when(groupRepository.save(group)).thenReturn(group);

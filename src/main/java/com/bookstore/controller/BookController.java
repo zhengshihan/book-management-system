@@ -30,7 +30,7 @@ public class BookController {
 	
 	@GetMapping("/bookstore/{author}/books")
 	public List<Book> getAllBooks(@PathVariable String author){
-		List<Book> books = bookService.getAllBooks(author);
+		List<Book> books = bookService.getAllGroups(author);
 		return books;
 	}
 	@GetMapping("/bookstore/{author}/books/{id}")
