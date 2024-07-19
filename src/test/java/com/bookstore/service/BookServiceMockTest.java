@@ -41,7 +41,7 @@ public class BookServiceMockTest {
 				new Book(10001, "bytecaptain", "Learn Java","This is a book"),
 				new Book(10002, "bytecaptain", "Learn Spring Boot","This is a book"));
 		when(bookRepository.findAll()).thenReturn(books);
-		assertEquals(books, bookService.getAllGroups("bytecaptain"));
+		assertEquals(books, bookService.getAllBooks("bytecaptain"));
 				
 	}
 	@Test

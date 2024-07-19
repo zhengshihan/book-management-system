@@ -11,6 +11,8 @@ import com.bookstore.model.User;
 public interface UserRepository extends JpaRepository<User,Long> {
 	List<User> findByGroupId(Long groupId);
 	
+	List<User>findUsersByRolesId(Long roleId);
+	
 	@Transactional
 	void deleteByGroupId(long groupId);
 }

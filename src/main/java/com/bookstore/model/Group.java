@@ -7,7 +7,15 @@ import javax.persistence.*;
 @Table(name = "groups")
 public class Group {
 
-    @Id
+
+
+
+
+
+
+
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String groupName;
@@ -20,6 +28,11 @@ public class Group {
     public Group(String groupName) {
         this.groupName = groupName;
     }
+    public Group(Long id, String groupName) {
+		super();
+		this.id = id;
+		this.groupName = groupName;
+	}
 
     public Long getId() {
         return id;

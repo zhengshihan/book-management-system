@@ -46,7 +46,7 @@ public class BookControllerIntegrationTest extends BasicIntegrationTest{
 	@Test
 	@Order(1)
 	public void addBook() {
-		Book book = new Book(10001, "bytecaptain", "Spring Boot Introduction","This is a book");
+		Book book = new Book(1, "bytecaptain", "Spring Boot Introduction","This is a book");
 		HttpEntity<Book>entity = new HttpEntity<>(book,getHttpHeader());
 		
 		ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("/bookstore/bytecaptain/books"), HttpMethod.POST,entity,String.class);

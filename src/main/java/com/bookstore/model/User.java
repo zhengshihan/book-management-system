@@ -1,5 +1,8 @@
 package com.bookstore.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -12,7 +15,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "users")
 public class User {
 
-    @Id
+    public User(Long id, String username, String password, Group group) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.group = group;
+	}
+
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -26,7 +38,27 @@ public class User {
     private Group group;
 
    
-    public User() {
+    
+    @ManyToMany(fetch = FetchType.LAZY,
+    	      cascade = {
+    	          CascadeType.PERSIST,
+    	          CascadeType.MERGE
+    	      },
+    	      mappedBy = "users")
+    	  @JsonIgnore
+    	  private Set<Role> roles = new HashSet<>();
+    
+    
+    
+    public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+
+	public User() {
     }
 
     public User(String username, String password, Group group) {
