@@ -1,14 +1,20 @@
 package com.bookstore.controller;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -24,13 +30,20 @@ import com.bookstore.model.Role;
 import com.bookstore.model.User;
 import com.bookstore.service.BookService;
 import com.bookstore.service.GroupService;
+import com.bookstore.service.RoleService;
 import com.bookstore.service.UserService;
 @CrossOrigin(origins = { "http://localhost:3000", "http://localhost:4200" })
-@RestController
+@Controller
 public class UserController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private RoleService roleService; 
+	
+	@Autowired
+	private GroupService groupService;
 
 	
 	@GetMapping("/bookstore/groups/{groupId}/users")
@@ -99,6 +112,50 @@ public class UserController {
 		ResponseEntity<Void> responseEntity = ResponseEntity.noContent().build();
 		return responseEntity;
 	}
+	
+	// Go to Registration Page
+    @GetMapping("/register")
+    public String showRegistrationForm(Model model) {
+        model.addAttribute("user", new User());
+        List<Role> roles = roleService.getAllRoles();
+        
+        List<Group> groups = groupService.getAllGroups();
+        model.addAttribute("roles", roles);
+        model.addAttribute("groups",groups);
+        return "registerUser";
+    }
+
+    
+    
+	// Read Form data to save into DB
+		@PostMapping("/saveUser")
+		public String saveUser(
+	            @ModelAttribute User user,
+	            @RequestParam(value = "roles", required = false) List<Long> roleIds, 
+	            @RequestParam(value = "group", required = false) long groupId,
+	            Model model
+				) 
+		{
+			 Set<Role> roleSet = new HashSet<>();
+		        if (roleIds != null) {
+		            roleSet = roleIds.stream()
+		                             .map(roleId -> roleService.getRole(roleId))  
+		                             .filter(role -> role != null)
+		                             .collect(Collectors.toSet());
+		        }
+		        user.setRoles(roleSet);
+		     
+	        // Save user
+		    User createdUser = userService.createUser(groupId, user);
+		    System.out.println(createdUser);
+	        User savedUser = userService.addUser((long)roleIds.toArray()[0], createdUser);
+	        Long id = savedUser.getId();
+	        String message = "User '" + id + "' saved successfully!";
+	        model.addAttribute("msg", message);
+
+	        // Return to the registration page
+	        return "registerUser";
+		}
 	
 
 }

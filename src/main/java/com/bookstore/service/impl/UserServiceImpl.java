@@ -2,11 +2,15 @@ package com.bookstore.service.impl;
 
 import java.util.List;
 import java.util.Optional;
-
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.bookstore.exception.GroupNotFoundException;
@@ -20,7 +24,7 @@ import com.bookstore.repository.UserRepository;
 import com.bookstore.service.UserService;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService,UserDetailsService {
 	Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
 	@Autowired
@@ -140,6 +144,26 @@ public class UserServiceImpl implements UserService {
 		    
 		    role.removeUser(userId);
 		    roleRepository.save(role);
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		// TODO Auto-generated method stub
+Optional<User> opt = userRepository.findUserByUsername(username);
+		
+		if(opt.isEmpty())
+				throw new UsernameNotFoundException("User with username: " +username +" not found !");
+		else {
+			User user = opt.get();
+			return new org.springframework.security.core.userdetails.User(
+					user.getUsername(),
+					user.getPassword(),
+					user.getRoles()
+					.stream()
+					.map(role-> new SimpleGrantedAuthority(role.getRoleName()))
+					.collect(Collectors.toSet())
+		    );
+		}
 	}
 	
 	
