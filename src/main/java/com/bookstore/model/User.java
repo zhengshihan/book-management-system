@@ -31,9 +31,9 @@ public class User {
     private String username;
     private String password;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
+//    @JsonIgnore
     @JoinColumn(name = "group_id", nullable = false)
     private Group group;
 
@@ -45,7 +45,7 @@ public class User {
     	          CascadeType.MERGE
     	      },
     	      mappedBy = "users")
-    	  @JsonIgnore
+//    	  @JsonIgnore
     	  private Set<Role> roles = new HashSet<>();
     
     

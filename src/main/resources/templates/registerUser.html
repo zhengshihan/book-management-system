@@ -111,7 +111,7 @@
                 <label>Group(s):</label>
                 <div th:each="group : ${groups}" class="checkbox-item">
                     <!-- Corrected Thymeleaf expression for dynamic ID -->
-                    <input type="checkbox" th:field="*{group}" th:value="${group.id}" th:id="'group-' + ${group.id}" />
+                    <input type="radio" th:field="*{group}" th:value="${group.id}" th:id="'group-' + ${group.id}" />
                     <label th:for="'group-' + ${group.id}" th:text="${group.groupName}"></label>
                 </div>
             </div>

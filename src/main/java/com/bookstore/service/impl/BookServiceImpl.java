@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.bookstore.exception.BookNotFoundException;
@@ -22,15 +24,27 @@ public class BookServiceImpl implements BookService {
     private BookRepository bookRepository;
     
 	@Override
-	public List<Book> getAllBooks(String author) {
+	public List<Book> getAllBooksByAuthor(String author) {
 		// TODO Auto-generated method stub
-		logger.trace("Entered get AllBooks method");
+		logger.trace("Entered get AllBooksByAuthor method");
 		
-		List<Book> books = bookRepository.findAll();
+		List<Book> books = bookRepository.findByAuthor(author);
 		
 		return books;
 	}
-
+//	@Override
+//	public List<Book> getAllBooks() {
+//		// TODO Auto-generated method stub
+//		logger.trace("Entered get AllBooks method");
+//		
+//		List<Book> books = bookRepository.findAll();
+//		
+//		return books;
+//	}
+	@Override
+	public Page<Book> getAllBooks(Pageable pageable) {
+        return bookRepository.findAll(pageable);
+    }
 	@Override
 	public Book getBook(String author, long id) {
 		// TODO Auto-generated method stub
@@ -70,5 +84,9 @@ public class BookServiceImpl implements BookService {
 		List<Book> books = bookRepository.findByAuthorAndTitle(author, title);
 		return books;
 	}
+	@Override
+	public List<Book> getBooksByAuthorAfterYear(String author, int year) {
+        return bookRepository.findByAuthorAndYearGreaterThan(author, year);
+    }
 
 }

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Book List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .pagination span, .pagination a {
+            padding: 10px 15px;
+            margin: 0 5px;
+            border: 1px solid #4CAF50;
+            color: #4CAF50;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .pagination a:hover {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .current-page {
+            font-weight: bold;
+            padding: 10px 15px;
+            border: 1px solid #4CAF50;
+            border-radius: 5px;
+            margin: 0 5px;
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+	      <header style="background-color: #4CAF50; color: white; padding: 10px; text-align: center;">
+        <div class="login-status" style="margin-bottom: 10px;">
+            <!-- Display current username and logout link -->
+            <span sec:authorize="isAuthenticated()" style="margin-right: 10px;">
+                Welcome, <strong sec:authentication="name"></strong> 
+                <a href="/api/logout" style="color: white; text-decoration: none;">Logout</a>
+            </span>
+            <!-- If user is not logged in, display login link -->
+            <span sec:authorize="!isAuthenticated()">
+                <a href="/api/login" style="color: white; text-decoration: none;">Login</a>
+            </span>
+        </div>
+        <h1 style="margin: 0;">Welcome to the Bookstore</h1>
+    </header>
+
+    <nav style="background-color: #f4f4f4; padding: 10px; text-align: center;">
+        <a href="/api/home" style="margin: 0 15px; text-decoration: none; color: #333;">Home</a>
+        <a href="/api/bookstore/books" style="margin: 0 15px; text-decoration: none; color: #333;">Browse All Books</a>
+        <a href="/api/bookstore/create" style="margin: 0 15px; text-decoration: none; color: #333;">Add New Book</a>
+    </nav>
+    <h1>Book List</h1>
+        <form id="bookSearchForm" method="get">
+    <input type="text" id="author" name="author" placeholder="Enter author" required />
+    <input type="number" id="year" name="year" placeholder="Enter year" required />
+    <button type="submit">Search Books After Year</button>
+</form>
+
+<script>
+    document.getElementById('bookSearchForm').onsubmit = function(event) {
+        event.preventDefault(); // 防止默认提交
+        const author = document.getElementById('author').value;
+        const year = document.getElementById('year').value;
+        
+        // 构建 URL
+        const url = `/api/bookstore/${encodeURIComponent(author)}/books/after/${year}`;
+        
+        // 重定向到构建的 URL
+        window.location.href = url;
+    }
+</script>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Description</th>
+                <th>Year</th> <!-- 添加年份列 -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="book : ${books}">
+                <td th:text="${book.title}"></td>
+                <td th:text="${book.author}"></td>
+                <td th:text="${book.description}"></td>
+                <td th:text="${book.year}"></td> <!-- 显示年份 -->
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- 分页导航 -->
+    <div class="pagination">
+        <span th:if="${currentPage > 0}">
+            <a th:href="@{/bookstore/books(page=${currentPage - 1}, size=${size})}">Previous</a>
+        </span>
+        
+        <span class="current-page" th:text="${currentPage + 1}"></span>
+        <span> of <span th:text="${totalPages}"></span></span>
+        
+        <span th:if="${currentPage < totalPages - 1}">
+            <a th:href="@{/bookstore/books(page=${currentPage + 1}, size=${size})}">Next</a>
+        </span>
+    </div>
+</body>
+</html>

@@ -33,7 +33,7 @@ import com.bookstore.service.GroupService;
 import com.bookstore.service.RoleService;
 import com.bookstore.service.UserService;
 @CrossOrigin(origins = { "http://localhost:3000", "http://localhost:4200" })
-@Controller
+@RestController
 public class UserController {
 	
 	@Autowired
@@ -113,49 +113,11 @@ public class UserController {
 		return responseEntity;
 	}
 	
-	// Go to Registration Page
-    @GetMapping("/register")
-    public String showRegistrationForm(Model model) {
-        model.addAttribute("user", new User());
-        List<Role> roles = roleService.getAllRoles();
-        
-        List<Group> groups = groupService.getAllGroups();
-        model.addAttribute("roles", roles);
-        model.addAttribute("groups",groups);
-        return "registerUser";
-    }
+
 
     
     
-	// Read Form data to save into DB
-		@PostMapping("/saveUser")
-		public String saveUser(
-	            @ModelAttribute User user,
-	            @RequestParam(value = "roles", required = false) List<Long> roleIds, 
-	            @RequestParam(value = "group", required = false) long groupId,
-	            Model model
-				) 
-		{
-			 Set<Role> roleSet = new HashSet<>();
-		        if (roleIds != null) {
-		            roleSet = roleIds.stream()
-		                             .map(roleId -> roleService.getRole(roleId))  
-		                             .filter(role -> role != null)
-		                             .collect(Collectors.toSet());
-		        }
-		        user.setRoles(roleSet);
-		     
-	        // Save user
-		    User createdUser = userService.createUser(groupId, user);
-		    System.out.println(createdUser);
-	        User savedUser = userService.addUser((long)roleIds.toArray()[0], createdUser);
-	        Long id = savedUser.getId();
-	        String message = "User '" + id + "' saved successfully!";
-	        model.addAttribute("msg", message);
-
-	        // Return to the registration page
-	        return "registerUser";
-		}
+	
 	
 
 }

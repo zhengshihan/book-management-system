@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Book</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+ header {
+            background-color: #4CAF50;
+            padding: 10px 0;
+            text-align: center;
+            color: white;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input[type="text"], input[type="number"], textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .success-message {
+            color: green;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+    <script>
+        // Function to validate form before submission
+        function validateForm(event) {
+            const yearField = document.getElementById("year");
+            const authorField = document.getElementById("author");
+            const titleField = document.getElementById("title");
+            const descriptionField = document.getElementById("description");
+
+            // Basic validation
+            if (!authorField.value || !titleField.value || !descriptionField.value) {
+                alert("Please fill in all fields.");
+                event.preventDefault(); // Prevent form submission
+                return false;
+            }
+
+            // Validate year field
+            if (!yearField.value || yearField.value < 1000 || yearField.value > 9999) {
+                alert("Please enter a valid year between 1000 and 9999.");
+                event.preventDefault(); // Prevent form submission
+                return false;
+            }
+
+            return true; // Indicate the form is valid
+        }
+
+        // Function to submit form using AJAX
+        async function submitForm(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            if (!validateForm(event)) {
+                return; // Stop if validation fails
+            }
+
+            const formData = new FormData(event.target);
+
+            try {
+                const response = await fetch(event.target.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('input[name="_csrf"]').value // Include CSRF token
+                    }
+                });
+
+                if (response.ok) {
+                    // Clear form fields
+                    document.getElementById("bookForm").reset();
+                    // Show success message
+                    const successMessage = document.getElementById("successMessage");
+                    successMessage.style.display = "block";
+                    successMessage.textContent = "Book created successfully!";
+                    setTimeout(() => {
+                        successMessage.style.display = "none"; // Hide message after 3 seconds
+                    }, 3000);
+                } else {
+                    alert("Failed to create book. Please try again.");
+                }
+            } catch (error) {
+                console.error("Error submitting form:", error);
+                alert("An error occurred while submitting the form.");
+            }
+        }
+    </script>
+</head>
+<body>
+	    <header>
+    <div class="login-status">
+        <!-- 显示当前用户名和登出链接 -->
+        <span sec:authorize="isAuthenticated()">Welcome, <strong sec:authentication="name"></strong> 
+        <a href="/api/logout">Logout</a></span>
+        
+        <!-- 如果用户未登录，显示登录链接 -->
+        <span sec:authorize="!isAuthenticated()">
+            <a href="/api/login">Login</a>
+        </span>
+    </div>
+    <h1>Welcome to the Bookstore</h1>
+</header>
+    <h1>Create a New Book</h1>
+    
+    <!-- Success message div -->
+    <div id="successMessage" class="success-message" style="display: none;"></div>
+
+    <form id="bookForm" th:action="@{/bookstore/books}" method="post" onsubmit="submitForm(event);">
+        <!-- Include CSRF token -->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <label for="author">Author</label>
+        <input type="text" id="author" name="author" required />
+
+        <label for="title">Title</label>
+        <input type="text" id="title" name="title" required />
+
+        <label for="year">Year</label>
+        <input type="number" id="year" name="year" required min="1000" max="9999" />
+
+        <label for="description">Description</label>
+        <textarea id="description" name="description" rows="4" required></textarea>
+
+        <button type="submit">Create Book</button>
+    </form>
+</body>
+</html>

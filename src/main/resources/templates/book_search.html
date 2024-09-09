@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Book List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4; /* Light background color */
+            color: #333; /* Dark text color */
+        }
+
+        h1 {
+            color: #2c3e50; /* Darker shade of blue */
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-align: center; /* Centered title */
+        }
+
+        form {
+            display: flex;
+            justify-content: center; /* Centering the form */
+            margin-bottom: 20px; /* Space below form */
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px; /* Spacing between input fields */
+            width: 200px; /* Fixed width for consistency */
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #3498db; /* Blue button background */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* Shadow for button */
+            transition: background-color 0.3s ease; /* Smooth color transition */
+        }
+
+        button:hover {
+            background-color: #2980b9; /* Darker blue on hover */
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            max-width: 600px; /* Limit width for readability */
+            margin: 0 auto; /* Center the list */
+        }
+
+        li {
+            background-color: #fff;
+            margin: 10px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth hover effects */
+            line-height: 1.6; /* Increase line spacing for readability */
+        }
+
+        li:hover {
+            transform: translateY(-5px); /* Slight lift on hover */
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+        }
+
+        .author {
+            font-weight: bold;
+            font-size: 1.2em; /* Increase font size */
+            color: #2c3e50; /* Dark color to stand out */
+            display: block; /* Display on a separate line */
+            margin-bottom: 5px; /* Space between author and title */
+        }
+
+        .year {
+            color: #777;
+            font-style: italic;
+            margin-left: 10px; /* Space between author and year */
+        }
+
+        .description {
+            display: block;
+            margin-top: 10px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Book List</h1>
+
+    <form id="bookSearchForm" method="get">
+        <input type="text" id="author" name="author" placeholder="Enter author" required />
+        <input type="number" id="year" name="year" placeholder="Enter year" required />
+        <button type="submit">Search Books After Year</button>
+    </form>
+
+    <script>
+        document.getElementById('bookSearchForm').onsubmit = function(event) {
+            event.preventDefault(); // Prevent default submission
+            const author = document.getElementById('author').value;
+            const year = document.getElementById('year').value;
+
+            // Construct URL
+            const url = `/api/bookstore/${encodeURIComponent(author)}/books/after/${year}`;
+
+            // Redirect to the constructed URL
+            window.location.href = url;
+        }
+    </script>
+
+    <ul>
+        <li th:each="book : ${books}">
+            <span class="author" th:text="${book.author}">Author</span> <!-- Display author prominently -->
+            <strong th:text="${book.title}">Book Title</strong> <!-- Display book title -->
+            <span class="year" th:text="${book.year}">Year</span> <!-- Display publication year -->
+            <span class="description" th:text="${book.description}">Description</span> <!-- Display description -->
+        </li>
+    </ul>
+</body>
+</html>

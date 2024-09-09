@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 
 @Entity
-@Table(name = "groups")
+@Table(name = "`groups`")
 public class Group {
 
 

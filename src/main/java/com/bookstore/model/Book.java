@@ -2,18 +2,19 @@ package com.bookstore.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class Book {
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String title;
 	private String author;
 	private String description;
-
+	private int year;
 	public Book() {
 		
 	}
@@ -47,6 +48,12 @@ public class Book {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public int getYear() {
+		return year;
+	}
+	public void setYear(int year) {
+		this.year = year;
 	}
 	
 	

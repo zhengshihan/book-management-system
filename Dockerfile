@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy the local JAR file into the container
-COPY target/bookmanagementsystem-1.0.jar /app/bookmanagementsystem.jar
+COPY target/bookstore-0.0.1-SNAPSHOT.jar /app/bookmanagementsystem.jar
 
 # Set the command to run the JAR file
 CMD ["java", "-jar", "bookmanagementsystem.jar"]
