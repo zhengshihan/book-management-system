@@ -19,18 +19,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private UserDetailsService uds;
 	
-//	@Autowired
-//	private BCryptPasswordEncoder encoder;
+	@Autowired
+	private BCryptPasswordEncoder encoder;
 	
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-	    return new BCryptPasswordEncoder();
-	}
+
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		
-		auth.userDetailsService(uds).passwordEncoder(passwordEncoder());
+		auth.userDetailsService(uds).passwordEncoder(encoder);
 	}
 	
 	@Override
