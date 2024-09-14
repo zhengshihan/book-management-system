@@ -1,93 +1,116 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" >
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Bookstore Home</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
+	<meta charset="UTF-8">
+	<title>Bookstore Home</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 0;
+			background-color: #f4f4f4;
+		}
 
-        header {
-            background-color: #4CAF50;
-            padding: 10px 0;
-            text-align: center;
-            color: white;
-        }
+		header {
+			background-color: #4CAF50;
+			padding: 10px 0;
+			text-align: center;
+			color: white;
+		}
 
-        nav {
-            display: flex;
-            justify-content: center;
-            background-color: #333;
-        }
+		nav {
+			display: flex;
+			justify-content: center;
+			background-color: #333;
+		}
 
-        nav a {
-            color: white;
-            padding: 14px 20px;
-            text-decoration: none;
-            text-align: center;
-        }
+		nav a {
+			color: white;
+			padding: 14px 20px;
+			text-decoration: none;
+			text-align: center;
+		}
 
-        nav a:hover {
-            background-color: #575757;
-        }
+		nav a:hover {
+			background-color: #575757;
+		}
 
-        .container {
-            padding: 20px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
+		.nav-links {
+			display: flex;
+			justify-content: flex-end;
+		}
 
-        h1 {
-            color: #333;
-            text-align: center;
-        }
+		.nav-links a {
+			color: white;
+			text-decoration: none;
+			margin-left: 10px;
+		}
 
-        p {
-            text-align: center;
-            color: #666;
-            font-size: 18px;
-        }
-    </style>
+		.container {
+			padding: 20px;
+			max-width: 1000px;
+			margin: 0 auto;
+		}
+
+		h1 {
+			color: #333;
+			text-align: center;
+		}
+
+		p {
+			text-align: center;
+			color: #666;
+			font-size: 18px;
+		}
+	</style>
 </head>
 
 <body>
-    <header style="background-color: #4CAF50; color: white; padding: 10px; text-align: center;">
-        <div class="login-status" style="margin-bottom: 10px;">
-            <!-- Display current username and logout link -->
-            <span sec:authorize="isAuthenticated()" style="margin-right: 10px;">
-                Welcome, <strong sec:authentication="name"></strong> 
-                <a href="/api/logout" style="color: white; text-decoration: none;">Logout</a>
-            </span>
-            <!-- If user is not logged in, display login link -->
-            <span sec:authorize="!isAuthenticated()">
-                <a href="/api/login" style="color: white; text-decoration: none;">Login</a>
-            </span>  
-            <span>
-				 <a href="/api/register" style="color: white; text-decoration: none;">Register</a>
+	<header style="background-color: #4CAF50; color: white; padding: 10px; text-align: center;">
+		<div class="login-status" style="margin-bottom: 10px;">
+			<!-- Display current username and logout link -->
+			<span sec:authorize="isAuthenticated()" style="margin-right: 10px;">
+				Welcome, <strong sec:authentication="name"></strong>
 			</span>
-            
-               
-            
-        </div>
-        <h1 style="margin: 0;">Welcome to the Bookstore</h1>
-    </header>
+			<!-- If user is not logged in, display login link -->
+			<div class="nav-links">
+				<span sec:authorize="!isAuthenticated()">
+					<a href="/api/login">Login</a>
+				</span>
+				<span sec:authorize="isAuthenticated()">
+					<a href="/api/logout">Log out</a>
+				</span>
+				<span>
+					<a href="/api/register">Register</a>
+				</span>
+			</div>
 
-    <nav style="background-color: #f4f4f4; padding: 10px; text-align: center;">
-        <a href="/api/home" style="margin: 0 15px; text-decoration: none; color: #333;">Home</a>
-        <a href="/api/bookstore/books" style="margin: 0 15px; text-decoration: none; color: #333;">Browse All Books</a>
-        <a href="/api/bookstore/create" style="margin: 0 15px; text-decoration: none; color: #333;">Add New Book</a>
-    </nav>
 
-    <div class="container">
-        <h1>Manage Your Book Collection</h1>
-        <p>Welcome to the bookstore management system. Use the navigation above to browse all books, or add a new book
-            to the collection.</p>
-    </div>
+
+		</div>
+		<h1 style="margin: 0;">Welcome to the Bookstore</h1>
+	</header>
+
+	<nav style="background-color: #f4f4f4; padding: 10px; text-align: center;">
+		<a href="/api/home" style="margin: 0 15px; text-decoration: none; color: #333;">Home</a>
+		<a href="/api/bookstore/books" style="margin: 0 15px; text-decoration: none; color: #333;">Browse All Books</a>
+		<a href="/api/bookstore/create" style="margin: 0 15px; text-decoration: none; color: #333;">Add New Book</a>
+	</nav>
+
+	<div class="container">
+<main>
+        <section id="welcome">
+            <p>Welcome to the bookstore management system. Use the navigation above to browse all books or add a new book to the collection.</p>
+            <p>To add new books, you must have <strong>administrator privileges</strong>.</p>
+        </section>
+
+        <section id="login-reminder">
+            <p>If you don't have an account, please <a href="/api/register">register here</a>.</p>
+            <p>If you already have an account, please <a href="/api/login">log in</a> to access the full features of the system.</p>
+        </section>
+    </main>
+	</div>
 </body>
 
 </html>

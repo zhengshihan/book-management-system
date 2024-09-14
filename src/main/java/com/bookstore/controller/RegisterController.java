@@ -75,6 +75,6 @@ public class RegisterController {
  	        model.addAttribute("msg", message);
 
  	        // Return to the registration page
- 	        return "registerUser";
+ 	        return "homePage";
  		}
 }
